@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAYTAM</title>
+    <style>
+        /* التنسيقات (CSS) */
+        :root {
+            --primary-color: #007bff; /* أزرق أساسي */
+            --secondary-color: #28a745; /* أخضر للنتائج */
+            --background-light: #f8f9fa;
+            --header-bg: #e9ecef;
+            --text-color: #343a40;
+            --border-color: #dee2e6;
+        }
+
+        body {
+            font-family: 'Droid Arabic Naskh', 'Arial', Tahoma, sans-serif;
+            background-color: var(--background-light);
+            margin: 0;
+            padding: 40px 0;
+            color: var(--text-color);
+            direction: rtl;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+        }
+        h2 {
+            text-align: center;
+            color: var(--primary-color);
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        p.subtitle {
+            text-align: center;
+            color: #6c757d;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 30px;
+            table-layout: fixed;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 10px 5px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        th {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 1.05em;
+            border-color: #0069d9;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        tbody tr:hover {
+            background-color: #e2f0ff;
+            transform: scale(1.005);
+            transition: all 0.2s;
+        }
+        td:first-child {
+            text-align: right;
+            font-weight: 600;
+            color: var(--text-color);
+            background-color: #f1f3f5;
+        }
+        input[type="text"] {
+            width: 90%;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1em;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background-color: #ffffff;
+        }
+        input[type="text"]:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 8px rgba(40, 167, 69, 0.3);
+            outline: none;
+        }
+        .average-cell {
+            background-color: #e9f7ef; 
+            font-weight: bold;
+            color: var(--secondary-color);
+            font-size: 1.1em;
+            border-right: 3px solid var(--secondary-color);
+        }
+        #result-box {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 25px;
+            border-radius: 10px;
+            font-size: 1.8em;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 30px;
+            border: 2px solid #c3e6cb;
+            box-shadow: 0 6px 15px rgba(21, 87, 36, 0.15);
+            transition: transform 0.3s ease;
+        }
+        #result-box:hover {
+            transform: translateY(-3px);
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 15px 0;
+            color: #6c757d;
+            font-size: 1em;
+            border-top: 1px solid var(--border-color);
+        }
+        .footer strong {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        .sub-header {
+            background-color: var(--header-bg);
+            color: var(--text-color);
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>حاسبة معلدورة الولى للمستوي تلتة اعدادي</h2>
+        <p class="subtitle">code by haytam</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2" style="width: 15%;">المادة</th>
+                    <th colspan="4" class="sub-header">علامات الفروض الكتابية</th>
+                    <th rowspan="2">علامة الأنشطة المندمجة</th>
+                    <th rowspan="2" style="width: 12%;">معدل المادة (من 20)</th>
+                </tr>
+                <tr>
+                    <th class="sub-header">الفرض 1</th>
+                    <th class="sub-header">الفرض 2</th>
+                    <th class="sub-header">الفرض 3</th>
+                    <th class="sub-header">الفرض 4</th>
+                </tr>
+            </thead>
+            <tbody id="grades-table-body">
+                </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6" style="text-align: left; font-weight: bold; background-color: #f1f3f5;">مجموع معدلات المواد</td>
+                    <td id="total-simple-average" class="average-cell">---</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div id="result-box">
+            المعدل العام النهائي: <span id="final-average">---</span>
+        </div>
+    </div>
+
+    <div class="footer">
+        ......................<strong>.....</strong>
+    </div>
+
+    <script>
+        // قائمة بالمواد
+        const subjects = [
+            "الرياضيات", "اللغة الفرنسية", "علوم الحياة والأرض", 
+            "الاجتماعيات", "التربية الإسلامية", "التكنولوجيا", 
+            "اللغة الإنجليزية", "اللغة العربية", "الفيزياء والكيمياء", 
+            "المعلوميات", "التربية البدنية"
+        ];
+
+        const tableBody = document.getElementById('grades-table-body');
+        const totalSimpleAverageElement = document.getElementById('total-simple-average');
+        const finalAverageElement = document.getElementById('final-average');
+        const numInputsPerSubject = 5; // 4 فروض + 1 أنشطة
+        const localStorageKey = 'gradesCalculatorData'; // المفتاح لحفظ البيانات في المتصفح
+
+        // 1. دالة الحفظ التلقائي
+        function saveGrades() {
+            const gradesData = {};
+            subjects.forEach((subject, index) => {
+                gradesData[subject] = [];
+                for (let i = 0; i < numInputsPerSubject; i++) {
+                    const inputElement = document.getElementById(`grade-${index}-${i}`);
+                    // نحفظ القيمة كما هي في حقل الإدخال (سواء كانت نقطة أو فاصلة)
+                    gradesData[subject].push(inputElement.value);
+                }
+            });
+            // حفظ البيانات كـ JSON في المتصفح
+            localStorage.setItem(localStorageKey, JSON.stringify(gradesData));
+        }
+
+        // 2. دالة تحميل العلامات
+        function loadGrades() {
+            const savedData = localStorage.getItem(localStorageKey);
+            if (savedData) {
+                const gradesData = JSON.parse(savedData);
+                subjects.forEach((subject, index) => {
+                    if (gradesData[subject]) {
+                        for (let i = 0; i < numInputsPerSubject; i++) {
+                            const inputElement = document.getElementById(`grade-${index}-${i}`);
+                            // ملء حقول الإدخال بالقيم المحفوظة
+                            if (inputElement && gradesData[subject][i] !== undefined) {
+                                inputElement.value = gradesData[subject][i];
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // دالة لمعالجة إدخال الفاصلة (,) أو النقطة (.)
+        function formatAndSaveInput(event) {
+            const input = event.target;
+            // استبدال الفاصلة (,) بالنقطة (.) لكي يتعرف عليها JavaScript كرقم عشري للحساب
+            input.value = input.value.replace(',', '.');
+            
+            // التأكد من أن القيمة ضمن النطاق [0, 20]
+            let grade = parseFloat(input.value);
+            if (!isNaN(grade)) {
+                if (grade < 0) input.value = '0';
+                if (grade > 20) input.value = '20';
+            }
+            
+            // تشغيل دالة الحساب
+            calculateOverallAverage();
+            
+            // **تشغيل دالة الحفظ التلقائي**
+            saveGrades();
+        }
+
+        // دالة لحساب متوسط المادة (لم تتغير)
+        function calculateSubjectAverage(index) {
+            let sumOfGrades = 0;
+            let countOfGrades = 0;
+            
+            for (let i = 0; i < numInputsPerSubject; i++) {
+                const inputElement = document.getElementById(`grade-${index}-${i}`);
+                // نستخدم parseFloat مباشرة، وهي تتعرف على النقطة (.) كفاصل عشري
+                const grade = parseFloat(inputElement.value);
+
+                if (!isNaN(grade) && grade >= 0 && grade <= 20) {
+                    sumOfGrades += grade;
+                    countOfGrades++;
+                }
+            }
+
+            let subjectAverage = 0;
+            if (countOfGrades > 0) {
+                subjectAverage = sumOfGrades / countOfGrades;
+            }
+            
+            return subjectAverage;
+        }
+
+        // دالة تحسب المعدل العام وتحديث النتائج (لم تتغير)
+        function calculateOverallAverage() {
+            let totalSubjectAverages = 0;
+            let countedSubjects = 0;
+
+            subjects.forEach((subject, index) => {
+                const avg = calculateSubjectAverage(index);
+                
+                const avgCell = document.getElementById(`subject-avg-${index}`);
+                if (avg > 0) {
+                    avgCell.textContent = avg.toFixed(2);
+                    totalSubjectAverages += avg;
+                    countedSubjects++;
+                } else {
+                    avgCell.textContent = '0.00';
+                }
+            });
+
+            totalSimpleAverageElement.textContent = totalSubjectAverages.toFixed(2);
+
+            let finalAverage = 0;
+            if (countedSubjects > 0) {
+                finalAverage = totalSubjectAverages / countedSubjects;
+            }
+
+            finalAverageElement.textContent = finalAverage > 0 ? finalAverage.toFixed(2) : '---';
+        }
+
+        // بناء صفوف الجدول عند تحميل الصفحة
+        function buildTable() {
+            subjects.forEach((subject, index) => {
+                const row = tableBody.insertRow();
+                let inputsHtml = '';
+                
+                for (let i = 0; i < numInputsPerSubject; i++) {
+                    inputsHtml += `
+                        <td>
+                            <input type="text" 
+                                id="grade-${index}-${i}" 
+                                placeholder="0.00"
+                                oninput="formatAndSaveInput(event)">
+                        </td>
+                    `;
+                }
+
+                row.innerHTML = `
+                    <td>${subject}</td>
+                    ${inputsHtml}
+                    <td id="subject-avg-${index}" class="average-cell">---</td>
+                `;
+            });
+            
+            // 3. تحميل العلامات المحفوظة عند بناء الجدول
+            loadGrades(); 
+            
+            // 4. حساب المعدلات بناءً على العلامات التي تم تحميلها
+            calculateOverallAverage();
+        }
+
+        // تشغيل وظيفة بناء الجدول عند تحميل الصفحة
+        window.onload = buildTable;
+
+    </script>
+</body>
+</html>
