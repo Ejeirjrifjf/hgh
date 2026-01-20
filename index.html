@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة معدل المراقبة المستمرة</title>
+    <title>حاسبة معدل المراقبة المستمرة والامتحان</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * {
@@ -52,6 +52,40 @@
             font-size: 1.1em;
         }
 
+        /* Tabs */
+        .tabs-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea;
+            border: 3px solid #667eea;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: transparent;
+        }
+
         /* Reset Button */
         .reset-btn {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
@@ -71,6 +105,15 @@
         .reset-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 15px 40px rgba(245, 87, 108, 0.6);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         /* Table Container */
@@ -197,6 +240,11 @@
                 font-size: 0.9em;
             }
 
+            .tab-btn {
+                padding: 12px 25px;
+                font-size: 1em;
+            }
+
             th, td {
                 padding: 8px 5px;
                 font-size: 0.85em;
@@ -260,52 +308,82 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <div class="header">
-            <h1>📚 حاسبة معدل المراقبة المستمرة</h1>
-            <p></p></p>
+            <h1>📚 حاسبة معدل المراقبة المستمرة والامتحان</h1>
+            <p>أدخل النقاط واحسب معدلك بسهولة</p>
         </div>
 
-        <!-- Reset Button -->
-        <center>
-            <button class="reset-btn" onclick="resetGrades()">🔄 إعادة ضبط جميع النقاط</button>
-        </center>
-
-        <!-- Grades Table -->
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th rowspan="2" style="width: 15%;">المادة</th>
-                        <th colspan="4" class="sub-header">علامات الفروض الكتابية</th>
-                        <th rowspan="2">علامة الأنشطة المندمجة</th>
-                        <th rowspan="2" style="width: 12%;">معدل المادة (من 20)</th>
-                    </tr>
-                    <tr>
-                        <th class="sub-header">الفرض 1</th>
-                        <th class="sub-header">الفرض 2</th>
-                        <th class="sub-header">الفرض 3</th>
-                        <th class="sub-header">الفرض 4</th>
-                    </tr>
-                </thead>
-                <tbody id="grades-table-body"></tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="6" style="text-align: left; font-weight: bold; background-color: #f8f9fa; padding-left: 20px;">مجموع معدلات المواد</td>
-                        <td id="total-simple-average" class="average-cell">---</td>
-                    </tr>
-                </tfoot>
-            </table>
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchTab('monitoring')">📝 المراقبة المستمرة</button>
+            <button class="tab-btn" onclick="switchTab('exam')">📄 الامتحان</button>
         </div>
 
-        <!-- Results Box -->
-        <div class="results-box">
-            <div class="label">المعدل العام النهائي</div>
-            <div class="value" id="final-average">---</div>
-        </div>
-        <p>yahya zennoud</p>
+        <div id="monitoring-tab" class="tab-content active">
+            <center>
+                <button class="reset-btn" onclick="resetGrades('monitoring')">🔄 إعادة ضبط نقاط المراقبة المستمرة</button>
+            </center>
 
-        <!-- Status Message -->
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th rowspan="2" style="width: 15%;">المادة</th>
+                            <th colspan="4" class="sub-header">علامات الفروض الكتابية</th>
+                            <th rowspan="2">علامة الأنشطة المندمجة</th>
+                            <th rowspan="2" style="width: 12%;">معدل المادة (من 20)</th>
+                        </tr>
+                        <tr>
+                            <th class="sub-header">الفرض 1</th>
+                            <th class="sub-header">الفرض 2</th>
+                            <th class="sub-header">الفرض 3</th>
+                            <th class="sub-header">الفرض 4</th>
+                        </tr>
+                    </thead>
+                    <tbody id="monitoring-table-body"></tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6" style="text-align: left; font-weight: bold; background-color: #f8f9fa; padding-left: 20px;">مجموع معدلات المواد</td>
+                            <td id="monitoring-total" class="average-cell">---</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="results-box">
+                <div class="label">المعدل العام للمراقبة المستمرة</div>
+                <div class="value" id="monitoring-average">---</div>
+            </div>
+        </div>
+
+        <div id="exam-tab" class="tab-content">
+            <center>
+                <button class="reset-btn" onclick="resetGrades('exam')">🔄 إعادة ضبط نقاط الامتحان</button>
+            </center>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 70%;">المادة</th>
+                            <th style="width: 30%;">نقطة الامتحان (من 20)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="exam-table-body"></tbody>
+                    <tfoot>
+                        <tr>
+                            <td style="text-align: left; font-weight: bold; background-color: #f8f9fa; padding-left: 20px;">مجموع نقاط الامتحان</td>
+                            <td id="exam-total" class="average-cell">---</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="results-box">
+                <div class="label">المعدل العام للامتحان</div>
+                <div class="value" id="exam-average">---</div>
+            </div>
+        </div>
+
         <div id="status-message" class="status-message" style="display: none;"></div>
     </div>
 
@@ -317,16 +395,15 @@
             "المعلوميات", "علوم الحياة والأرض"
         ];
 
-        const tableBody = document.getElementById('grades-table-body');
-        const totalSimpleAverageElement = document.getElementById('total-simple-average');
-        const finalAverageElement = document.getElementById('final-average');
-        const statusMessage = document.getElementById('status-message');
         const numInputsPerSubject = 5;
-
-        // استخدام متغير JavaScript بدلاً من localStorage
-        let gradesData = {};
+        let currentTab = 'monitoring';
+        
+        // متغيرات لتخزين البيانات في الذاكرة
+        let monitoringData = {};
+        let examData = {};
 
         function showStatus(message, duration = 3000) {
+            const statusMessage = document.getElementById('status-message');
             statusMessage.textContent = message;
             statusMessage.style.display = 'block';
             setTimeout(() => {
@@ -334,48 +411,87 @@
             }, duration);
         }
 
-        function saveGrades() {
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${tab}-tab`).classList.add('active');
+        }
+
+        function saveMonitoringGrades() {
             subjects.forEach((subject, index) => {
-                gradesData[subject] = [];
+                monitoringData[subject] = [];
                 for (let i = 0; i < numInputsPerSubject; i++) {
-                    const inputElement = document.getElementById(`grade-${index}-${i}`);
-                    gradesData[subject].push(inputElement.value);
+                    const inputElement = document.getElementById(`monitoring-${index}-${i}`);
+                    monitoringData[subject].push(inputElement.value);
                 }
             });
-            showStatus('✅ تم حفظ البيانات بنجاح');
+            showStatus('✅ تم حفظ نقاط المراقبة المستمرة');
         }
 
-        function loadGrades() {
+        function saveExamGrades() {
             subjects.forEach((subject, index) => {
-                if (gradesData[subject]) {
+                const inputElement = document.getElementById(`exam-${index}`);
+                examData[subject] = inputElement.value;
+            });
+            showStatus('✅ تم حفظ نقاط الامتحان');
+        }
+
+        function loadMonitoringGrades() {
+            subjects.forEach((subject, index) => {
+                if (monitoringData[subject]) {
                     for (let i = 0; i < numInputsPerSubject; i++) {
-                        const inputElement = document.getElementById(`grade-${index}-${i}`);
-                        if (inputElement && gradesData[subject][i] !== undefined) {
-                            inputElement.value = gradesData[subject][i];
+                        const inputElement = document.getElementById(`monitoring-${index}-${i}`);
+                        if (inputElement && monitoringData[subject][i] !== undefined) {
+                            inputElement.value = monitoringData[subject][i];
                         }
                     }
                 }
             });
         }
 
-        function resetGrades() {
-            if (confirm("هل أنت متأكد من مسح جميع العلامات؟")) {
-                subjects.forEach((subject, index) => {
-                    for (let i = 0; i < numInputsPerSubject; i++) {
-                        const inputElement = document.getElementById(`grade-${index}-${i}`);
-                        if (inputElement) {
-                            inputElement.value = '';
-                        }
-                    }
-                });
+        function loadExamGrades() {
+            subjects.forEach((subject, index) => {
+                const inputElement = document.getElementById(`exam-${index}`);
+                if (inputElement && examData[subject] !== undefined) {
+                    inputElement.value = examData[subject];
+                }
+            });
+        }
 
-                gradesData = {};
-                calculateOverallAverage();
+        function resetGrades(type) {
+            if (confirm(`هل أنت متأكد من مسح جميع نقاط ${type === 'monitoring' ? 'المراقبة المستمرة' : 'الامتحان'}؟`)) {
+                if (type === 'monitoring') {
+                    subjects.forEach((subject, index) => {
+                        for (let i = 0; i < numInputsPerSubject; i++) {
+                            const inputElement = document.getElementById(`monitoring-${index}-${i}`);
+                            if (inputElement) inputElement.value = '';
+                        }
+                    });
+                    monitoringData = {};
+                    calculateMonitoringAverage();
+                } else {
+                    subjects.forEach((subject, index) => {
+                        const inputElement = document.getElementById(`exam-${index}`);
+                        if (inputElement) inputElement.value = '';
+                    });
+                    examData = {};
+                    calculateExamAverage();
+                }
                 showStatus('🔄 تم إعادة ضبط جميع النقاط بنجاح');
             }
         }
 
-        function formatAndSaveInput(event) {
+        function formatAndSaveMonitoring(event) {
             const input = event.target;
             input.value = input.value.replace(',', '.');
             
@@ -387,16 +503,32 @@
                 input.value = input.value.replace(/[^0-9.]/g, '');
             }
             
-            calculateOverallAverage();
-            saveGrades();
+            calculateMonitoringAverage();
+            saveMonitoringGrades();
         }
 
-        function calculateSubjectAverage(index) {
+        function formatAndSaveExam(event) {
+            const input = event.target;
+            input.value = input.value.replace(',', '.');
+            
+            let grade = parseFloat(input.value);
+            if (!isNaN(grade)) {
+                if (grade < 0) input.value = '0';
+                if (grade > 20) input.value = '20';
+            } else if (input.value !== '') {
+                input.value = input.value.replace(/[^0-9.]/g, '');
+            }
+            
+            calculateExamAverage();
+            saveExamGrades();
+        }
+
+        function calculateMonitoringSubjectAverage(index) {
             let sumOfGrades = 0;
             let countOfGrades = 0;
             
             for (let i = 0; i < numInputsPerSubject; i++) {
-                const inputElement = document.getElementById(`grade-${index}-${i}`);
+                const inputElement = document.getElementById(`monitoring-${index}-${i}`);
                 const grade = parseFloat(inputElement.value);
 
                 if (!isNaN(grade) && grade >= 0 && grade <= 20) {
@@ -405,21 +537,16 @@
                 }
             }
 
-            let subjectAverage = 0;
-            if (countOfGrades > 0) {
-                subjectAverage = sumOfGrades / countOfGrades;
-            }
-            
-            return subjectAverage;
+            return countOfGrades > 0 ? sumOfGrades / countOfGrades : 0;
         }
 
-        function calculateOverallAverage() {
+        function calculateMonitoringAverage() {
             let totalSubjectAverages = 0;
             let countedSubjects = 0;
 
             subjects.forEach((subject, index) => {
-                const avg = calculateSubjectAverage(index);
-                const avgCell = document.getElementById(`subject-avg-${index}`);
+                const avg = calculateMonitoringSubjectAverage(index);
+                const avgCell = document.getElementById(`monitoring-avg-${index}`);
                 
                 if (avg > 0) {
                     avgCell.textContent = avg.toFixed(2);
@@ -430,21 +557,38 @@
                 }
             });
 
-            totalSimpleAverageElement.textContent = totalSubjectAverages > 0 
-                ? totalSubjectAverages.toFixed(2) 
-                : '---';
+            document.getElementById('monitoring-total').textContent = 
+                totalSubjectAverages > 0 ? totalSubjectAverages.toFixed(2) : '---';
 
-            let finalAverage = 0;
-            if (countedSubjects > 0) {
-                finalAverage = totalSubjectAverages / countedSubjects;
-            }
-
-            finalAverageElement.textContent = finalAverage > 0 
-                ? finalAverage.toFixed(2) 
-                : '---';
+            const finalAverage = countedSubjects > 0 ? totalSubjectAverages / countedSubjects : 0;
+            document.getElementById('monitoring-average').textContent = 
+                finalAverage > 0 ? finalAverage.toFixed(2) : '---';
         }
 
-        function buildTable() {
+        function calculateExamAverage() {
+            let totalGrades = 0;
+            let countedSubjects = 0;
+
+            subjects.forEach((subject, index) => {
+                const inputElement = document.getElementById(`exam-${index}`);
+                const grade = parseFloat(inputElement.value);
+
+                if (!isNaN(grade) && grade >= 0 && grade <= 20) {
+                    totalGrades += grade;
+                    countedSubjects++;
+                }
+            });
+
+            document.getElementById('exam-total').textContent = 
+                totalGrades > 0 ? totalGrades.toFixed(2) : '---';
+
+            const finalAverage = countedSubjects === 11 ? totalGrades / 11 : 0;
+            document.getElementById('exam-average').textContent = 
+                finalAverage > 0 ? finalAverage.toFixed(2) : '---';
+        }
+
+        function buildMonitoringTable() {
+            const tableBody = document.getElementById('monitoring-table-body');
             subjects.forEach((subject, index) => {
                 const row = tableBody.insertRow();
                 let inputsHtml = '';
@@ -453,9 +597,9 @@
                     inputsHtml += `
                         <td>
                             <input type="text" 
-                                id="grade-${index}-${i}" 
+                                id="monitoring-${index}-${i}" 
                                 placeholder="0.00"
-                                oninput="formatAndSaveInput(event)">
+                                oninput="formatAndSaveMonitoring(event)">
                         </td>
                     `;
                 }
@@ -463,15 +607,37 @@
                 row.innerHTML = `
                     <td>${subject}</td>
                     ${inputsHtml}
-                    <td id="subject-avg-${index}" class="average-cell">---</td>
+                    <td id="monitoring-avg-${index}" class="average-cell">---</td>
                 `;
             });
             
-            loadGrades();
-            calculateOverallAverage();
+            loadMonitoringGrades();
+            calculateMonitoringAverage();
         }
 
-        window.onload = buildTable;
+        function buildExamTable() {
+            const tableBody = document.getElementById('exam-table-body');
+            subjects.forEach((subject, index) => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td style="text-align: right; font-weight: 700; background: #f8f9fa; padding-right: 15px; color: #333;">${subject}</td>
+                    <td>
+                        <input type="text" 
+                            id="exam-${index}" 
+                            placeholder="0.00"
+                            oninput="formatAndSaveExam(event)">
+                    </td>
+                `;
+            });
+            
+            loadExamGrades();
+            calculateExamAverage();
+        }
+
+        window.onload = function() {
+            buildMonitoringTable();
+            buildExamTable();
+        };
     </script>
 </body>
 </html>
