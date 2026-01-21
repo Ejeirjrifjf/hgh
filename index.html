@@ -25,128 +25,197 @@
             margin: 0 auto;
         }
 
-        /* Header */
+        /* Header with 3D effect */
         .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 25px;
-            padding: 30px;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 35px;
+            padding: 45px 35px;
             text-align: center;
             margin-bottom: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            border: 2px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4), 0 10px 20px rgba(102, 126, 234, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.7);
+            position: relative;
+            transform: perspective(1000px) rotateX(2deg);
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 35px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            z-index: -1;
+            opacity: 0.3;
+            filter: blur(20px);
         }
 
         .header h1 {
-            font-size: 2.5em;
+            font-size: 2.8em;
             background: linear-gradient(135deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             font-weight: 900;
+            text-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
         }
 
         .header p {
-            color: #666;
-            font-size: 1.1em;
+            color: #555;
+            font-size: 1.25em;
+            font-weight: 600;
         }
 
-        /* Tabs */
-        .tabs-container {
+        /* Modern tabs */
+        .tabs-wrapper {
             display: flex;
-            justify-content: center;
-            gap: 15px;
+            gap: 25px;
             margin-bottom: 30px;
+            justify-content: center;
             flex-wrap: wrap;
         }
 
         .tab-btn {
             background: rgba(255, 255, 255, 0.95);
             color: #667eea;
-            border: 3px solid #667eea;
-            padding: 15px 40px;
-            font-size: 1.2em;
-            font-weight: bold;
-            border-radius: 50px;
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.3em;
+            font-weight: 800;
+            border-radius: 20px;
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-            transition: all 0.3s ease;
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             font-family: 'Tajawal', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            transform: translateY(100%);
+            transition: transform 0.4s;
+            z-index: 0;
+        }
+
+        .tab-btn span {
+            position: relative;
+            z-index: 1;
         }
 
         .tab-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.5);
+        }
+
+        .tab-btn.active::before {
+            transform: translateY(0);
         }
 
         .tab-btn.active {
-            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            border-color: transparent;
         }
 
-        /* Reset Button */
-        .reset-btn {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.1em;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.4);
-            transition: all 0.3s ease;
-            margin-bottom: 30px;
-            font-family: 'Tajawal', sans-serif;
-        }
-
-        .reset-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 40px rgba(245, 87, 108, 0.6);
-        }
-
-        /* Tab Content */
+        /* Content sections */
         .tab-content {
             display: none;
+            animation: fadeSlide 0.6s ease-out;
         }
 
         .tab-content.active {
             display: block;
         }
 
-        /* Table Container */
-        .table-responsive {
-            overflow-x: auto;
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Control panel */
+        .control-panel {
+            text-align: center;
             margin-bottom: 30px;
-            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.2em;
+            font-weight: 800;
             border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            box-shadow: 0 15px 40px rgba(245, 87, 108, 0.5);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(245, 87, 108, 0.7);
+        }
+
+        .reset-btn:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        /* Table container with glass effect */
+        .table-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            overflow-x: auto;
         }
 
         table {
-            min-width: 800px;
             width: 100%;
+            min-width: 800px;
             border-collapse: separate;
             border-spacing: 0;
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
         }
 
         th, td {
-            border: 1px solid #e0e0e0;
-            padding: 15px 10px;
+            border: 2px solid #e8e8e8;
+            padding: 18px 12px;
             text-align: center;
             vertical-align: middle;
+            transition: all 0.3s ease;
         }
 
         th {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            font-weight: 700;
-            font-size: 0.95em;
+            font-weight: 800;
+            font-size: 1.05em;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        th::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .sub-header {
@@ -155,154 +224,241 @@
 
         td:first-child {
             text-align: right;
-            font-weight: 700;
-            background: #f8f9fa;
-            padding-right: 15px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            padding-right: 20px;
             color: #333;
+            font-size: 1.05em;
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+            transform: scale(1.01);
         }
 
         input[type="text"] {
             width: 90%;
-            padding: 10px;
-            font-size: 1em;
-            font-weight: bold;
+            padding: 12px;
+            font-size: 1.1em;
+            font-weight: 800;
             text-align: center;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
             transition: all 0.3s ease;
             font-family: 'Tajawal', sans-serif;
+            background: white;
         }
 
         input[type="text"]:focus {
             outline: none;
             border-color: #667eea;
-            background: #f0f4ff;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            background: linear-gradient(135deg, #f0f4ff, #ffffff);
+            box-shadow: 0 0 0 5px rgba(102, 126, 234, 0.15);
+            transform: scale(1.08);
         }
 
         .average-cell {
-            background: linear-gradient(135deg, #11998e, #38ef7d);
+            background: linear-gradient(135deg, #11998e, #38ef7d) !important;
             font-weight: 900;
             color: white;
-            font-size: 1.2em;
+            font-size: 1.3em;
             border: none !important;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
 
-        /* Results Box */
-        .results-box {
+        .average-cell::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+
+        /* Results panel with depth */
+        .results-panel {
             background: linear-gradient(135deg, #576fde 0%, #57a1f5 100%);
-            border-radius: 25px;
-            padding: 40px;
+            border-radius: 30px;
+            padding: 45px;
             text-align: center;
-            margin-bottom: 20px;
-            box-shadow: 0 20px 60px rgba(2, 193, 151, 0.4);
+            margin-bottom: 25px;
+            box-shadow: 0 25px 70px rgba(87, 111, 222, 0.6), inset 0 -5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .results-box .label {
+        .results-panel::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .results-header {
             color: white;
-            font-size: 1.5em;
-            margin-bottom: 15px;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            font-weight: 800;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .results-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-box {
+            background: white;
+            border-radius: 22px;
+            padding: 30px 45px;
+            min-width: 200px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .result-box:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+        }
+
+        .result-label {
+            color: #666;
+            font-size: 1em;
+            margin-bottom: 10px;
             font-weight: 700;
         }
 
-        .results-box .value {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            font-size: 3em;
+        .result-value {
+            font-size: 3.2em;
             font-weight: 900;
-            color: #105db5;
-            display: inline-block;
-            min-width: 200px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        /* Status Message */
-        .status-message {
-            text-align: center;
-            color: white;
-            font-weight: bold;
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(200px);
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            color: #333;
+            padding: 20px 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+            font-weight: 800;
             font-size: 1.1em;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            margin-top: 20px;
-            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 3px solid #667eea;
         }
 
-        /* Mobile Optimization */
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8em;
-            }
-
-            .header p {
-                font-size: 0.9em;
-            }
-
-            .tab-btn {
-                padding: 12px 25px;
-                font-size: 1em;
-            }
-
-            th, td {
-                padding: 8px 5px;
-                font-size: 0.85em;
-            }
-
-            input[type="text"] {
-                padding: 8px;
-                font-size: 0.9em;
-            }
-
-            .results-box {
-                padding: 25px 15px;
-            }
-
-            .results-box .label {
-                font-size: 1.2em;
-            }
-
-            .results-box .value {
-                font-size: 2em;
-                min-width: 150px;
-            }
-
-            .reset-btn {
-                width: 100%;
-                max-width: 300px;
-            }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* Scrollbar styling */
+        .table-wrapper::-webkit-scrollbar {
+            height: 12px;
         }
 
-        .container > * {
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        /* Scrollbar Style */
-        .table-responsive::-webkit-scrollbar {
-            height: 8px;
-        }
-
-        .table-responsive::-webkit-scrollbar-track {
+        .table-wrapper::-webkit-scrollbar-track {
             background: #f1f1f1;
             border-radius: 10px;
         }
 
-        .table-responsive::-webkit-scrollbar-thumb {
+        .table-wrapper::-webkit-scrollbar-thumb {
             background: linear-gradient(135deg, #667eea, #764ba2);
             border-radius: 10px;
+        }
+
+        .table-wrapper::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #764ba2, #667eea);
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .header {
+                padding: 30px 20px;
+                border-radius: 25px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .header p {
+                font-size: 1em;
+            }
+
+            .tab-btn {
+                padding: 15px 35px;
+                font-size: 1.1em;
+            }
+
+            .table-wrapper {
+                padding: 15px;
+                border-radius: 20px;
+            }
+
+            th, td {
+                padding: 12px 8px;
+                font-size: 0.9em;
+            }
+
+            input[type="text"] {
+                padding: 10px;
+                font-size: 1em;
+            }
+
+            .results-panel {
+                padding: 30px 20px;
+            }
+
+            .results-header {
+                font-size: 1.4em;
+            }
+
+            .result-box {
+                padding: 25px 35px;
+                min-width: 160px;
+            }
+
+            .result-value {
+                font-size: 2.5em;
+            }
+
+            .reset-btn {
+                padding: 15px 40px;
+                font-size: 1.1em;
+            }
         }
     </style>
 </head>
@@ -310,20 +466,24 @@
     <div class="container">
         <div class="header">
             <h1>📚 حاسبة معدل المراقبة المستمرة والامتحان</h1>
-            <p>أدخل النقاط واحسب معدلك بسهولة</p>
+            <p>أدخل النقاط واحسب معدلك بسهولة - يتم حفظ بياناتك تلقائياً</p>
         </div>
 
-        <div class="tabs-container">
-            <button class="tab-btn active" onclick="switchTab('monitoring')">📝 المراقبة المستمرة</button>
-            <button class="tab-btn" onclick="switchTab('exam')">📄 الامتحان</button>
+        <div class="tabs-wrapper">
+            <button class="tab-btn active" onclick="switchTab('monitoring')">
+                <span>📝 المراقبة المستمرة</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('exam')">
+                <span>📄 الامتحان</span>
+            </button>
         </div>
 
         <div id="monitoring-tab" class="tab-content active">
-            <center>
+            <div class="control-panel">
                 <button class="reset-btn" onclick="resetGrades('monitoring')">🔄 إعادة ضبط نقاط المراقبة المستمرة</button>
-            </center>
+            </div>
 
-            <div class="table-responsive">
+            <div class="table-wrapper">
                 <table>
                     <thead>
                         <tr>
@@ -342,25 +502,30 @@
                     <tbody id="monitoring-table-body"></tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="6" style="text-align: left; font-weight: bold; background-color: #f8f9fa; padding-left: 20px;">مجموع معدلات المواد</td>
+                            <td colspan="6" style="text-align: left; font-weight: bold; padding-left: 20px;">مجموع معدلات المواد</td>
                             <td id="monitoring-total" class="average-cell">---</td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
 
-            <div class="results-box">
-                <div class="label">المعدل العام للمراقبة المستمرة</div>
-                <div class="value" id="monitoring-average">---</div>
+            <div class="results-panel">
+                <div class="results-header">المعدل العام للمراقبة المستمرة</div>
+                <div class="results-boxes">
+                    <div class="result-box">
+                        <div class="result-label">المعدل العام</div>
+                        <div class="result-value" id="monitoring-average">---</div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div id="exam-tab" class="tab-content">
-            <center>
+            <div class="control-panel">
                 <button class="reset-btn" onclick="resetGrades('exam')">🔄 إعادة ضبط نقاط الامتحان</button>
-            </center>
+            </div>
 
-            <div class="table-responsive">
+            <div class="table-wrapper">
                 <table>
                     <thead>
                         <tr>
@@ -371,20 +536,25 @@
                     <tbody id="exam-table-body"></tbody>
                     <tfoot>
                         <tr>
-                            <td style="text-align: left; font-weight: bold; background-color: #f8f9fa; padding-left: 20px;">مجموع نقاط الامتحان</td>
+                            <td style="text-align: left; font-weight: bold; padding-left: 20px;">مجموع نقاط الامتحان</td>
                             <td id="exam-total" class="average-cell">---</td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
 
-            <div class="results-box">
-                <div class="label">المعدل العام للامتحان</div>
-                <div class="value" id="exam-average">---</div>
+            <div class="results-panel">
+                <div class="results-header">المعدل العام للامتحان</div>
+                <div class="results-boxes">
+                    <div class="result-box">
+                        <div class="result-label">المعدل العام</div>
+                        <div class="result-value" id="exam-average">---</div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div id="status-message" class="status-message" style="display: none;"></div>
+        <div id="toast" class="toast"></div>
     </div>
 
     <script>
@@ -396,76 +566,168 @@
         ];
 
         const numInputsPerSubject = 5;
-        let currentTab = 'monitoring';
-        
-        // متغيرات لتخزين البيانات في الذاكرة
         let monitoringData = {};
         let examData = {};
 
-        function showStatus(message, duration = 3000) {
-            const statusMessage = document.getElementById('status-message');
-            statusMessage.textContent = message;
-            statusMessage.style.display = 'block';
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
             setTimeout(() => {
-                statusMessage.style.display = 'none';
-            }, duration);
+                toast.classList.remove('show');
+            }, 3000);
         }
 
         function switchTab(tab) {
-            currentTab = tab;
-            
-            // Update tab buttons
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
-            
-            // Update tab content
+
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
             });
             document.getElementById(`${tab}-tab`).classList.add('active');
         }
 
-        function saveMonitoringGrades() {
-            subjects.forEach((subject, index) => {
-                monitoringData[subject] = [];
-                for (let i = 0; i < numInputsPerSubject; i++) {
-                    const inputElement = document.getElementById(`monitoring-${index}-${i}`);
-                    monitoringData[subject].push(inputElement.value);
+        function saveToStorage() {
+            const data = {
+                monitoring: monitoringData,
+                exam: examData
+            };
+            try {
+                localStorage.setItem('gradeCalculatorData', JSON.stringify(data));
+            } catch (e) {
+                console.error('Error saving to localStorage:', e);
+            }
+        }
+
+        function loadFromStorage() {
+            try {
+                const saved = localStorage.getItem('gradeCalculatorData');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    monitoringData = data.monitoring || {};
+                    examData = data.exam || {};
+                    return true;
                 }
-            });
-            showStatus('✅ تم حفظ نقاط المراقبة المستمرة');
+            } catch (e) {
+                console.error('Error loading from localStorage:', e);
+            }
+            return false;
         }
 
-        function saveExamGrades() {
-            subjects.forEach((subject, index) => {
-                const inputElement = document.getElementById(`exam-${index}`);
-                examData[subject] = inputElement.value;
-            });
-            showStatus('✅ تم حفظ نقاط الامتحان');
+        function formatAndSaveMonitoring(event) {
+            const input = event.target;
+            input.value = input.value.replace(',', '.');
+            
+            let grade = parseFloat(input.value);
+            if (!isNaN(grade)) {
+                if (grade < 0) input.value = '0';
+                if (grade > 20) input.value = '20';
+            } else if (input.value !== '') {
+                input.value = input.value.replace(/[^0-9.]/g, '');
+            }
+
+            const id = input.id;
+            const parts = id.split('-');
+            const subjectIndex = parseInt(parts[1]);
+            const gradeIndex = parseInt(parts[2]);
+
+            if (!monitoringData[subjectIndex]) {
+                monitoringData[subjectIndex] = {};
+            }
+            monitoringData[subjectIndex][gradeIndex] = input.value;
+            
+            saveToStorage();
+            calculateMonitoringAverage();
         }
 
-        function loadMonitoringGrades() {
+        function formatAndSaveExam(event) {
+            const input = event.target;
+            input.value = input.value.replace(',', '.');
+            
+            let grade = parseFloat(input.value);
+            if (!isNaN(grade)) {
+                if (grade < 0) input.value = '0';
+                if (grade > 20) input.value = '20';
+            } else if (input.value !== '') {
+                input.value = input.value.replace(/[^0-9.]/g, '');
+            }
+
+            const id = input.id;
+            const subjectIndex = parseInt(id.split('-')[1]);
+            
+            examData[subjectIndex] = input.value;
+            
+            saveToStorage();
+            calculateExamAverage();
+        }
+
+        function calculateMonitoringSubjectAverage(index) {
+            let sumOfGrades = 0;
+            let countOfGrades = 0;
+            
+            for (let i = 0; i < numInputsPerSubject; i++) {
+                const value = monitoringData[index]?.[i];
+                const grade = parseFloat(value);
+
+                if (!isNaN(grade) && grade >= 0 && grade <= 20) {
+                    sumOfGrades += grade;
+                    countOfGrades++;
+                }
+            }
+
+            return countOfGrades > 0 ? sumOfGrades / countOfGrades : 0;
+        }
+
+        function calculateMonitoringAverage() {
+            let totalSubjectAverages = 0;
+            let countedSubjects = 0;
+
             subjects.forEach((subject, index) => {
-                if (monitoringData[subject]) {
-                    for (let i = 0; i < numInputsPerSubject; i++) {
-                        const inputElement = document.getElementById(`monitoring-${index}-${i}`);
-                        if (inputElement && monitoringData[subject][i] !== undefined) {
-                            inputElement.value = monitoringData[subject][i];
-                        }
+                const avg = calculateMonitoringSubjectAverage(index);
+                const avgCell = document.getElementById(`monitoring-avg-${index}`);
+                
+                if (avgCell) {
+                    if (avg > 0) {
+                        avgCell.textContent = avg.toFixed(2);
+                        totalSubjectAverages += avg;
+                        countedSubjects++;
+                    } else {
+                        avgCell.textContent = '---';
                     }
                 }
             });
+
+            document.getElementById('monitoring-total').textContent = 
+                totalSubjectAverages > 0 ? totalSubjectAverages.toFixed(2) : '---';
+
+            const finalAverage = countedSubjects > 0 ? totalSubjectAverages / countedSubjects : 0;
+            document.getElementById('monitoring-average').textContent = 
+                finalAverage > 0 ? finalAverage.toFixed(2) : '---';
         }
 
-        function loadExamGrades() {
+        function calculateExamAverage() {
+            let totalGrades = 0;
+            let countedSubjects = 0;
+
             subjects.forEach((subject, index) => {
-                const inputElement = document.getElementById(`exam-${index}`);
-                if (inputElement && examData[subject] !== undefined) {
-                    inputElement.value = examData[subject];
+                const value = examData[index];
+                const grade = parseFloat(value);
+
+                if (!isNaN(grade) && grade >= 0 && grade <= 20) {
+                    totalGrades += grade;
+                    countedSubjects++;
                 }
             });
+
+            document.getElementById('exam-total').textContent = 
+                totalGrades > 0 ? totalGrades.toFixed(2) : '---';
+
+            const finalAverage = countedSubjects === 11 ? totalGrades / 11 : 0;
+            document.getElementById('exam-average').textContent = 
+                finalAverage > 0 ? finalAverage.toFixed(2) : '---';
         }
 
         function resetGrades(type) {
@@ -487,104 +749,9 @@
                     examData = {};
                     calculateExamAverage();
                 }
-                showStatus('🔄 تم إعادة ضبط جميع النقاط بنجاح');
+                saveToStorage();
+                showToast('🔄 تم إعادة ضبط جميع النقاط بنجاح');
             }
-        }
-
-        function formatAndSaveMonitoring(event) {
-            const input = event.target;
-            input.value = input.value.replace(',', '.');
-            
-            let grade = parseFloat(input.value);
-            if (!isNaN(grade)) {
-                if (grade < 0) input.value = '0';
-                if (grade > 20) input.value = '20';
-            } else if (input.value !== '') {
-                input.value = input.value.replace(/[^0-9.]/g, '');
-            }
-            
-            calculateMonitoringAverage();
-            saveMonitoringGrades();
-        }
-
-        function formatAndSaveExam(event) {
-            const input = event.target;
-            input.value = input.value.replace(',', '.');
-            
-            let grade = parseFloat(input.value);
-            if (!isNaN(grade)) {
-                if (grade < 0) input.value = '0';
-                if (grade > 20) input.value = '20';
-            } else if (input.value !== '') {
-                input.value = input.value.replace(/[^0-9.]/g, '');
-            }
-            
-            calculateExamAverage();
-            saveExamGrades();
-        }
-
-        function calculateMonitoringSubjectAverage(index) {
-            let sumOfGrades = 0;
-            let countOfGrades = 0;
-            
-            for (let i = 0; i < numInputsPerSubject; i++) {
-                const inputElement = document.getElementById(`monitoring-${index}-${i}`);
-                const grade = parseFloat(inputElement.value);
-
-                if (!isNaN(grade) && grade >= 0 && grade <= 20) {
-                    sumOfGrades += grade;
-                    countOfGrades++;
-                }
-            }
-
-            return countOfGrades > 0 ? sumOfGrades / countOfGrades : 0;
-        }
-
-        function calculateMonitoringAverage() {
-            let totalSubjectAverages = 0;
-            let countedSubjects = 0;
-
-            subjects.forEach((subject, index) => {
-                const avg = calculateMonitoringSubjectAverage(index);
-                const avgCell = document.getElementById(`monitoring-avg-${index}`);
-                
-                if (avg > 0) {
-                    avgCell.textContent = avg.toFixed(2);
-                    totalSubjectAverages += avg;
-                    countedSubjects++;
-                } else {
-                    avgCell.textContent = '---';
-                }
-            });
-
-            document.getElementById('monitoring-total').textContent = 
-                totalSubjectAverages > 0 ? totalSubjectAverages.toFixed(2) : '---';
-
-            const finalAverage = countedSubjects > 0 ? totalSubjectAverages / countedSubjects : 0;
-            document.getElementById('monitoring-average').textContent = 
-                finalAverage > 0 ? finalAverage.toFixed(2) : '---';
-        }
-
-        function calculateExamAverage() {
-            let totalGrades = 0;
-            let countedSubjects = 0;
-
-            subjects.forEach((subject, index) => {
-                const inputElement = document.getElementById(`exam-${index}`);
-                const grade = parseFloat(inputElement.value);
-
-                if (!isNaN(grade) && grade >= 0 && grade <= 20) {
-                    totalGrades += grade;
-                    countedSubjects++;
-                }
-            });
-
-            document.getElementById('exam-total').textContent = 
-                totalGrades > 0 ? totalGrades.toFixed(2) : '---';
-
-            const finalAverage = countedSubjects === 11 ? totalGrades / 11 : 0;
-            document.getElementById('exam-average').textContent = 
-                finalAverage > 0 ? finalAverage.toFixed(2) : '---';
         }
 
         function buildMonitoringTable() {
@@ -594,11 +761,13 @@
                 let inputsHtml = '';
                 
                 for (let i = 0; i < numInputsPerSubject; i++) {
+                    const savedValue = monitoringData[index]?.[i] || '';
                     inputsHtml += `
                         <td>
                             <input type="text" 
                                 id="monitoring-${index}-${i}" 
                                 placeholder="0.00"
+                                value="${savedValue}"
                                 oninput="formatAndSaveMonitoring(event)">
                         </td>
                     `;
@@ -611,7 +780,6 @@
                 `;
             });
             
-            loadMonitoringGrades();
             calculateMonitoringAverage();
         }
 
@@ -619,24 +787,31 @@
             const tableBody = document.getElementById('exam-table-body');
             subjects.forEach((subject, index) => {
                 const row = tableBody.insertRow();
+                const savedValue = examData[index] || '';
+                
                 row.innerHTML = `
-                    <td style="text-align: right; font-weight: 700; background: #f8f9fa; padding-right: 15px; color: #333;">${subject}</td>
+                    <td style="text-align: right; font-weight: 800; background: linear-gradient(135deg, #f8f9fa, #ffffff); padding-right: 20px; color: #333; font-size: 1.05em;">${subject}</td>
                     <td>
                         <input type="text" 
                             id="exam-${index}" 
                             placeholder="0.00"
+                            value="${savedValue}"
                             oninput="formatAndSaveExam(event)">
                     </td>
                 `;
             });
             
-            loadExamGrades();
             calculateExamAverage();
         }
 
         window.onload = function() {
+            const hasData = loadFromStorage();
             buildMonitoringTable();
             buildExamTable();
+            
+            if (hasData) {
+                showToast('✅ تم تحميل بياناتك المحفوظة');
+            }
         };
     </script>
 </body>
