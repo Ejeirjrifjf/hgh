@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة المعدل</title>
+    <title></title>haytam</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -34,122 +34,70 @@
             background: var(--card-bg);
             border-radius: 20px;
             border: 1px solid var(--border);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .header h1 {
-            font-size: 2.2rem;
-            color: #fff;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
         }
 
         .tabs-wrapper {
             display: flex;
             gap: 10px;
             margin-bottom: 25px;
-            background: rgba(0,0,0,0.2);
-            padding: 8px;
-            border-radius: 15px;
-            width: fit-content;
-            margin-left: auto;
-            margin-right: auto;
+            justify-content: center;
         }
 
         .tab-btn {
-            background: transparent;
+            background: #1a1d2e;
             color: #888;
-            border: none;
+            border: 1px solid var(--border);
             padding: 12px 30px;
             border-radius: 10px;
             cursor: pointer;
             font-weight: 700;
-            transition: 0.3s;
         }
 
         .tab-btn.active {
             background: var(--accent);
             color: white;
-            box-shadow: 0 5px 15px rgba(61, 90, 254, 0.4);
         }
 
         .table-card {
             background: var(--card-bg);
             border-radius: 20px;
-            padding: 25px;
+            padding: 20px;
             border: 1px solid var(--border);
             overflow-x: auto;
         }
 
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 8px;
-        }
+        table { width: 100%; border-collapse: separate; border-spacing: 0 5px; }
 
-        th {
-            padding: 15px;
-            color: #888;
-            font-weight: 400;
-            text-align: center;
-            font-size: 0.9rem;
-        }
+        th { padding: 10px; color: #888; font-size: 0.9rem; }
 
-        tbody tr {
-            background: rgba(255,255,255,0.03);
-            transition: 0.2s;
-        }
-
-        tbody tr:hover { background: rgba(255,255,255,0.06); }
-
-        td {
-            padding: 10px;
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-            text-align: center;
-        }
+        td { padding: 8px; text-align: center; background: rgba(255,255,255,0.02); }
 
         td:first-child {
-            border-right: 1px solid var(--border);
-            border-left: none;
-            border-radius: 0 12px 12px 0;
             text-align: right;
-            padding-right: 20px;
+            padding-right: 15px;
             color: #fff;
             font-weight: 700;
-            min-width: 180px;
+            border-radius: 0 10px 10px 0;
+            min-width: 160px;
         }
 
-        td:last-child {
-            border-left: 1px solid var(--border);
-            border-radius: 12px 0 0 12px;
-        }
+        td:last-child { border-radius: 10px 0 0 10px; }
 
         input {
-            width: 70px;
-            background: rgba(0,0,0,0.3);
+            width: 65px;
+            background: rgba(0,0,0,0.4);
             border: 1px solid var(--border);
-            padding: 10px;
-            border-radius: 8px;
+            padding: 8px;
+            border-radius: 6px;
             color: #fff;
             text-align: center;
             font-weight: 700;
             outline: none;
-            transition: 0.3s;
         }
 
-        input:focus {
-            border-color: var(--accent);
-            background: rgba(61, 90, 254, 0.1);
-            box-shadow: 0 0 10px rgba(61, 90, 254, 0.2);
-        }
+        input:focus { border-color: var(--accent); background: rgba(61, 90, 254, 0.1); }
 
-        .avg-display {
-            background: var(--accent) !important;
-            color: white !important;
-            font-weight: 900;
-            border-radius: 8px;
-        }
+        .avg-display { font-weight: 900; color: var(--accent); }
 
         .summary-bar {
             margin-top: 30px;
@@ -160,31 +108,22 @@
 
         .stat-box {
             background: var(--card-bg);
-            padding: 25px;
-            border-radius: 20px;
+            padding: 20px;
+            border-radius: 15px;
             text-align: center;
             border: 1px solid var(--border);
         }
 
-        .stat-box h3 { font-size: 0.8rem; color: #888; margin-bottom: 10px; }
-        .stat-box p { font-size: 2.5rem; font-weight: 900; color: var(--accent); }
+        .stat-box p { font-size: 2rem; font-weight: 900; color: var(--accent); }
 
         .reset-btn {
             background: rgba(244, 67, 54, 0.1);
             color: #f44336;
             border: 1px solid rgba(244, 67, 54, 0.2);
-            padding: 8px 20px;
-            border-radius: 8px;
+            padding: 5px 15px;
+            border-radius: 5px;
             cursor: pointer;
-            margin-bottom: 15px;
-            transition: 0.3s;
-        }
-
-        .reset-btn:hover { background: #f44336; color: white; }
-
-        @media (max-width: 768px) {
-            input { width: 55px; }
-            .header h1 { font-size: 1.5rem; }
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -192,13 +131,13 @@
 
 <div class="container">
     <div class="header">
-        <h1>حاسبة المعدل</h1>
+        <h1>حاسبة النقط</h1>
         <p></p>
     </div>
 
     <div class="tabs-wrapper">
-        <button class="tab-btn active" onclick="switchSection('monitoring')">المراقبة المستمرة</button>
-        <button class="tab-btn" onclick="switchSection('exam')">الامتحان</button>
+        <button class="tab-btn active" id="btn-m" onclick="switchSection('monitoring')">المراقبة المستمرة</button>
+        <button class="tab-btn" id="btn-e" onclick="switchSection('exam')">الامتحان</button>
     </div>
 
     <div id="monitoring-section" class="tab-content">
@@ -233,18 +172,9 @@
     </div>
 
     <div class="summary-bar">
-        <div class="stat-box">
-            <h3>معدل المراقبة</h3>
-            <p id="m-final">0.00</p>
-        </div>
-        <div class="stat-box">
-            <h3>معدل الامتحان</h3>
-            <p id="e-final">0.00</p>
-        </div>
-        <div class="stat-box" style="background: linear-gradient(45deg, #1a1d2e, #3d5afe);">
-            <h3 style="color: #fff;">المعدل العام</h3>
-            <p id="total-final" style="color: #fff;">0.00</p>
-        </div>
+        <div class="stat-box"><h3>معدل المراقبة</h3><p id="m-final">0.00</p></div>
+        <div class="stat-box"><h3>معدل الامتحان</h3><p id="e-final">0.00</p></div>
+        <div class="stat-box" style="border-color: var(--accent)"><h3>المعدل النهائي</h3><p id="total-final">0.00</p></div>
     </div>
 </div>
 
@@ -263,79 +193,67 @@
         const eBody = document.getElementById('e-body');
 
         subjects.forEach((s, i) => {
-            // بناء جدول المراقبة
             let mRow = `<tr><td>${s}</td>`;
             for(let j=0; j<5; j++) {
-                mRow += `<td><input type="number" class="nav-input" data-row="${i}" data-col="${j}" 
-                          value="${db.m[i]?.[j] || ''}" oninput="saveM(${i},${j},this.value)"></td>`;
+                mRow += `<td><input type="text" class="nav-input" data-row="${i}" data-col="${j}" 
+                          value="${db.m[i]?.[j] || ''}" oninput="validate(this); saveM(${i},${j},this.value)"></td>`;
             }
             mRow += `<td id="m-res-${i}" class="avg-display">---</td></tr>`;
             mBody.innerHTML += mRow;
 
-            // بناء جدول الامتحان
             eBody.innerHTML += `<tr><td style="text-align:right">${s}</td>
-                <td><input type="number" class="nav-input-e" data-row="${i}" data-col="0" 
-                value="${db.e[i] || ''}" oninput="saveE(${i},this.value)"></td></tr>`;
+                <td><input type="text" class="nav-input-e" data-row="${i}" data-col="0" 
+                value="${db.e[i] || ''}" oninput="validate(this); saveE(${i},this.value)"></td></tr>`;
         });
-
         setupNavigation();
         calc();
     }
 
-    // ميزة التنقل بالأسهم (للحواسيب فقط)
+    function validate(input) {
+        input.value = input.value.replace(/[^0-9.]/g, ''); // يسمح فقط بالأرقام والنقطة
+        if (parseFloat(input.value) > 20) input.value = "20";
+    }
+
     function setupNavigation() {
         document.addEventListener('keydown', (e) => {
             const active = document.activeElement;
             if (!active.classList.contains('nav-input') && !active.classList.contains('nav-input-e')) return;
 
-            let row = parseInt(active.dataset.row);
-            let col = parseInt(active.dataset.col);
             const isExam = active.classList.contains('nav-input-e');
             const selector = isExam ? '.nav-input-e' : '.nav-input';
-            const maxCol = isExam ? 0 : 4;
+            let row = parseInt(active.dataset.row);
+            let col = parseInt(active.dataset.col);
 
-            if (e.key === 'ArrowRight') col = Math.max(0, col - 1);
-            if (e.key === 'ArrowLeft') col = Math.min(maxCol, col + 1);
-            if (e.key === 'ArrowUp') row = Math.max(0, row - 1);
-            if (e.key === 'ArrowDown') row = Math.min(subjects.length - 1, row + 1);
-
-            const next = document.querySelector(`${selector}[data-row="${row}"][data-col="${col}"]`);
-            if (next) {
-                e.preventDefault();
-                next.focus();
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                e.preventDefault(); // منع المتصفح من تحريك النص داخل الخانة
+                if (e.key === 'ArrowRight') col = Math.max(0, col - 1);
+                if (e.key === 'ArrowLeft') col = Math.min(isExam ? 0 : 4, col + 1);
+                if (e.key === 'ArrowUp') row = Math.max(0, row - 1);
+                if (e.key === 'ArrowDown') row = Math.min(subjects.length - 1, row + 1);
+                
+                const next = document.querySelector(`${selector}[data-row="${row}"][data-col="${col}"]`);
+                if (next) next.focus();
             }
         });
     }
 
-    function saveM(r, c, v) {
-        if(!db.m[r]) db.m[r] = {};
-        db.m[r][c] = v;
-        sync();
-    }
-
-    function saveE(r, v) {
-        db.e[r] = v;
-        sync();
-    }
-
-    function sync() {
-        localStorage.setItem('gradeDB', JSON.stringify(db));
-        calc();
-    }
+    function saveM(r, c, v) { if(!db.m[r]) db.m[r] = {}; db.m[r][c] = v; sync(); }
+    function saveE(r, v) { db.e[r] = v; sync(); }
+    function sync() { localStorage.setItem('gradeDB', JSON.stringify(db)); calc(); }
 
     function calc() {
         let mTotal = 0, mCount = 0;
         subjects.forEach((_, i) => {
-            const vals = Object.values(db.m[i] || {}).filter(v => v !== "");
+            const vals = Object.values(db.m[i] || {}).filter(v => v !== "" && !isNaN(v));
             if(vals.length > 0) {
                 const avg = vals.reduce((a,b) => parseFloat(a)+parseFloat(b), 0) / vals.length;
                 document.getElementById(`m-res-${i}`).innerText = avg.toFixed(2);
                 mTotal += avg; mCount++;
-            }
+            } else { document.getElementById(`m-res-${i}`).innerText = "---"; }
         });
 
         const mFinal = mCount > 0 ? mTotal / mCount : 0;
-        const eVal = Object.values(db.e).filter(v => v !== "");
+        const eVal = Object.values(db.e).filter(v => v !== "" && !isNaN(v));
         const eFinal = eVal.length > 0 ? eVal.reduce((a,b) => parseFloat(a)+parseFloat(b), 0) / eVal.length : 0;
 
         document.getElementById('m-final').innerText = mFinal.toFixed(2);
@@ -346,19 +264,17 @@
     function switchSection(sec) {
         document.getElementById('monitoring-section').style.display = sec === 'monitoring' ? 'block' : 'none';
         document.getElementById('exam-section').style.display = sec === 'exam' ? 'block' : 'none';
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.innerText.includes(sec === 'monitoring' ? 'المراقبة' : 'الامتحان')));
+        document.getElementById('btn-m').classList.toggle('active', sec === 'monitoring');
+        document.getElementById('btn-e').classList.toggle('active', sec === 'exam');
     }
 
     function clearData(type) {
-        if(confirm("حذف جميع النقاط؟")) {
+        if(confirm("مسح جميع النقاط؟")) {
             if(type === 'monitoring') db.m = {}; else db.e = {};
-            sync();
-            location.reload();
+            sync(); location.reload();
         }
     }
-
     init();
 </script>
-
 </body>
 </html>
