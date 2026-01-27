@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>haytam</title>
+    <title>حاسبة النقط - Haytam</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -132,7 +132,7 @@
 <div class="container">
     <div class="header">
         <h1>حاسبة النقط</h1>
-        <p></p>
+        <p>المراقبة (75% فروض + 25% أنشطة)</p>
     </div>
 
     <div class="tabs-wrapper">
@@ -147,7 +147,7 @@
                 <thead>
                     <tr>
                         <th>المادة</th>
-                        <th>فرض 1</th><th>فرض 2</th><th>فرض 3</th><th>فرض 4</th><th>أنشطة</th>
+                        <th>فرض 1</th><th>فرض 2</th><th>فرض 3</th><th>فرض 4</th><th>أنشطة (25%)</th>
                         <th>المعدل</th>
                     </tr>
                 </thead>
@@ -193,6 +193,7 @@
         const eBody = document.getElementById('e-body');
 
         subjects.forEach((s, i) => {
+            // المراقبة المستمرة
             let mRow = `<tr><td>${s}</td>`;
             for(let j=0; j<5; j++) {
                 mRow += `<td><input type="text" class="nav-input" data-row="${i}" data-col="${j}" 
@@ -201,6 +202,7 @@
             mRow += `<td id="m-res-${i}" class="avg-display">---</td></tr>`;
             mBody.innerHTML += mRow;
 
+            // الامتحان
             eBody.innerHTML += `<tr><td style="text-align:right">${s}</td>
                 <td><input type="text" class="nav-input-e" data-row="${i}" data-col="0" 
                 value="${db.e[i] || ''}" oninput="validate(this); saveE(${i},this.value)"></td></tr>`;
@@ -210,7 +212,7 @@
     }
 
     function validate(input) {
-        input.value = input.value.replace(/[^0-9.]/g, ''); // يسمح فقط بالأرقام والنقطة
+        input.value = input.value.replace(/[^0-9.]/g, '');
         if (parseFloat(input.value) > 20) input.value = "20";
     }
 
@@ -225,7 +227,7 @@
             let col = parseInt(active.dataset.col);
 
             if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
-                e.preventDefault(); // منع المتصفح من تحريك النص داخل الخانة
+                e.preventDefault();
                 if (e.key === 'ArrowRight') col = Math.max(0, col - 1);
                 if (e.key === 'ArrowLeft') col = Math.min(isExam ? 0 : 4, col + 1);
                 if (e.key === 'ArrowUp') row = Math.max(0, row - 1);
@@ -243,13 +245,43 @@
 
     function calc() {
         let mTotal = 0, mCount = 0;
+
         subjects.forEach((_, i) => {
-            const vals = Object.values(db.m[i] || {}).filter(v => v !== "" && !isNaN(v));
-            if(vals.length > 0) {
-                const avg = vals.reduce((a,b) => parseFloat(a)+parseFloat(b), 0) / vals.length;
-                document.getElementById(`m-res-${i}`).innerText = avg.toFixed(2);
-                mTotal += avg; mCount++;
-            } else { document.getElementById(`m-res-${i}`).innerText = "---"; }
+            const subjectData = db.m[i] || {};
+            
+            // استخراج الفروض (الأعمدة 0 إلى 3)
+            let exams = [];
+            for(let j=0; j<4; j++) {
+                if(subjectData[j] !== undefined && subjectData[j] !== "" && !isNaN(subjectData[j])) {
+                    exams.push(parseFloat(subjectData[j]));
+                }
+            }
+            
+            // استخراج نقطة الأنشطة (العمود 4)
+            const activity = subjectData[4];
+            const hasActivity = activity !== undefined && activity !== "" && !isNaN(activity);
+
+            if(exams.length > 0 || hasActivity) {
+                let subjectAvg = 0;
+                
+                if(exams.length > 0 && hasActivity) {
+                    // المعادلة المطلوبة: (معدل الفروض * 0.75) + (الأنشطة * 0.25)
+                    const examsAvg = exams.reduce((a, b) => a + b, 0) / exams.length;
+                    subjectAvg = (examsAvg * 0.75) + (parseFloat(activity) * 0.25);
+                } else if (exams.length > 0) {
+                    // إذا لم توجد أنشطة بعد، نحسب معدل الفروض فقط
+                    subjectAvg = exams.reduce((a, b) => a + b, 0) / exams.length;
+                } else {
+                    // إذا وجدت الأنشطة فقط
+                    subjectAvg = parseFloat(activity);
+                }
+
+                document.getElementById(`m-res-${i}`).innerText = subjectAvg.toFixed(2);
+                mTotal += subjectAvg; 
+                mCount++;
+            } else { 
+                document.getElementById(`m-res-${i}`).innerText = "---"; 
+            }
         });
 
         const mFinal = mCount > 0 ? mTotal / mCount : 0;
@@ -258,6 +290,8 @@
 
         document.getElementById('m-final').innerText = mFinal.toFixed(2);
         document.getElementById('e-final').innerText = eFinal.toFixed(2);
+        
+        // المعدل النهائي (بناءً على افتراض أن المراقبة والامتحان لهما نفس الوزن)
         document.getElementById('total-final').innerText = ((mFinal + eFinal) / 2).toFixed(2);
     }
 
