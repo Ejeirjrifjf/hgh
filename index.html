@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة النقط - Haytam</title>
+    <title>حاسبة النقط </title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #0f111a;
             --card-bg: rgba(26, 29, 46, 0.95);
             --accent: #3d5afe;
+            --tarl-color: #00e676;
             --text-main: #e0e0e0;
             --border: rgba(255, 255, 255, 0.1);
         }
@@ -25,7 +26,7 @@
             padding: 30px 15px;
         }
 
-        .container { max-width: 1200px; margin: 0 auto; }
+        .container { max-width: 1300px; margin: 0 auto; }
 
         .header {
             text-align: center;
@@ -68,7 +69,7 @@
 
         table { width: 100%; border-collapse: separate; border-spacing: 0 5px; }
 
-        th { padding: 10px; color: #888; font-size: 0.9rem; }
+        th { padding: 10px; color: #888; font-size: 0.85rem; text-align: center; }
 
         td { padding: 8px; text-align: center; background: rgba(255,255,255,0.02); }
 
@@ -81,10 +82,10 @@
             min-width: 160px;
         }
 
-        td:last-child { border-radius: 10px 0 0 10px; }
+        .tarl-input { border-color: var(--tarl-color) !important; color: var(--tarl-color) !important; }
 
         input {
-            width: 65px;
+            width: 55px;
             background: rgba(0,0,0,0.4);
             border: 1px solid var(--border);
             padding: 8px;
@@ -125,14 +126,21 @@
             cursor: pointer;
             margin-bottom: 10px;
         }
+
+        .tarl-notice {
+            margin-top: 15px;
+            color: var(--tarl-color);
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.1rem;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1>حاسبة النقط</h1>
-        <p>المراقبة (75% فروض + 25% أنشطة)</p>
+        <h1>حاسبة النقط  </h1>
     </div>
 
     <div class="tabs-wrapper">
@@ -140,23 +148,29 @@
         <button class="tab-btn" id="btn-e" onclick="switchSection('exam')">الامتحان</button>
     </div>
 
-    <div id="monitoring-section" class="tab-content">
+    <div id="monitoring-section">
         <button class="reset-btn" onclick="clearData('monitoring')">مسح البيانات</button>
         <div class="table-card">
             <table>
                 <thead>
                     <tr>
                         <th>المادة</th>
-                        <th>فرض 1</th><th>فرض 2</th><th>فرض 3</th><th>فرض 4</th><th>أنشطة (25%)</th>
+                        <th style="color:var(--tarl-color)">TARL (خاص)</th>
+                        <th>فرض 1</th>
+                        <th>فرض 2</th>
+                        <th>فرض 3</th>
+                        <th>فرض 4</th>
+                        <th>أنشطة</th>
                         <th>المعدل</th>
                     </tr>
                 </thead>
                 <tbody id="m-body"></tbody>
             </table>
         </div>
+        <p class="tarl-notice">لن تعتمد نقطة TARL الخاصة بالجتماعيات  في الحساب</p>
     </div>
 
-    <div id="exam-section" class="tab-content" style="display:none">
+    <div id="exam-section" style="display:none">
         <button class="reset-btn" onclick="clearData('exam')">مسح البيانات</button>
         <div class="table-card">
             <table>
@@ -186,6 +200,9 @@
         "المعلوميات", "علوم الحياة والأرض"
     ];
 
+    // المواد التي تظهر فيها خانة TARL منفصلة
+    const tarlVisibleSubjects = ["اللغة العربية", "اللغة الفرنسية", "الرياضيات", "علوم الحياة والأرض"];
+
     let db = JSON.parse(localStorage.getItem('gradeDB')) || { m: {}, e: {} };
 
     function init() {
@@ -193,50 +210,35 @@
         const eBody = document.getElementById('e-body');
 
         subjects.forEach((s, i) => {
-            // المراقبة المستمرة
+            let showTarlInput = tarlVisibleSubjects.includes(s);
+            
             let mRow = `<tr><td>${s}</td>`;
+            
+            // خانة TARL (العمود 5)
+            mRow += `<td><input type="text" class="nav-input ${showTarlInput ? 'tarl-input' : ''}" 
+                        ${!showTarlInput ? 'disabled placeholder="-" style="opacity:0.3"' : ''} 
+                        data-row="${i}" data-col="5" value="${db.m[i]?.[5] || ''}" 
+                        oninput="validate(this); saveM(${i},5,this.value)"></td>`;
+
+            // الفروض والأنشطة (0-4)
             for(let j=0; j<5; j++) {
                 mRow += `<td><input type="text" class="nav-input" data-row="${i}" data-col="${j}" 
                           value="${db.m[i]?.[j] || ''}" oninput="validate(this); saveM(${i},${j},this.value)"></td>`;
             }
+            
             mRow += `<td id="m-res-${i}" class="avg-display">---</td></tr>`;
             mBody.innerHTML += mRow;
 
-            // الامتحان
             eBody.innerHTML += `<tr><td style="text-align:right">${s}</td>
                 <td><input type="text" class="nav-input-e" data-row="${i}" data-col="0" 
                 value="${db.e[i] || ''}" oninput="validate(this); saveE(${i},this.value)"></td></tr>`;
         });
-        setupNavigation();
         calc();
     }
 
     function validate(input) {
         input.value = input.value.replace(/[^0-9.]/g, '');
         if (parseFloat(input.value) > 20) input.value = "20";
-    }
-
-    function setupNavigation() {
-        document.addEventListener('keydown', (e) => {
-            const active = document.activeElement;
-            if (!active.classList.contains('nav-input') && !active.classList.contains('nav-input-e')) return;
-
-            const isExam = active.classList.contains('nav-input-e');
-            const selector = isExam ? '.nav-input-e' : '.nav-input';
-            let row = parseInt(active.dataset.row);
-            let col = parseInt(active.dataset.col);
-
-            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
-                e.preventDefault();
-                if (e.key === 'ArrowRight') col = Math.max(0, col - 1);
-                if (e.key === 'ArrowLeft') col = Math.min(isExam ? 0 : 4, col + 1);
-                if (e.key === 'ArrowUp') row = Math.max(0, row - 1);
-                if (e.key === 'ArrowDown') row = Math.min(subjects.length - 1, row + 1);
-                
-                const next = document.querySelector(`${selector}[data-row="${row}"][data-col="${col}"]`);
-                if (next) next.focus();
-            }
-        });
     }
 
     function saveM(r, c, v) { if(!db.m[r]) db.m[r] = {}; db.m[r][c] = v; sync(); }
@@ -246,52 +248,43 @@
     function calc() {
         let mTotal = 0, mCount = 0;
 
-        subjects.forEach((_, i) => {
-            const subjectData = db.m[i] || {};
+        subjects.forEach((s, i) => {
+            const data = db.m[i] || {};
+            let res = 0;
             
-            // استخراج الفروض (الأعمدة 0 إلى 3)
-            let exams = [];
-            for(let j=0; j<4; j++) {
-                if(subjectData[j] !== undefined && subjectData[j] !== "" && !isNaN(subjectData[j])) {
-                    exams.push(parseFloat(subjectData[j]));
-                }
+            if (tarlVisibleSubjects.includes(s)) {
+                // المعادلة للمواد الأساسية: TARL*0.2 + F1*0.3 + F2*0.3 + Act*0.2
+                const tarl = parseFloat(data[5]) || 0;
+                const f1 = parseFloat(data[0]) || 0;
+                const f2 = parseFloat(data[1]) || 0;
+                const act = parseFloat(data[4]) || 0;
+                res = (tarl * 0.2) + (f1 * 0.3) + (f2 * 0.3) + (act * 0.2);
+            } 
+            else if (s === "الفيزياء والكيمياء") {
+                // الفيزياء: 5 خانات (F1, F2, F3/TARL, F4, Act) كل واحدة ضرب 0.2
+                let sum = 0;
+                for(let j=0; j<5; j++) sum += (parseFloat(data[j]) || 0);
+                res = sum * 0.2;
             }
-            
-            // استخراج نقطة الأنشطة (العمود 4)
-            const activity = subjectData[4];
-            const hasActivity = activity !== undefined && activity !== "" && !isNaN(activity);
+            else {
+                // النظام العادي لباقي المواد (بما فيها الاجتماعيات)
+                let vals = [0,1,2,3,4].filter(k => data[k] !== "" && data[k] !== undefined).map(k => parseFloat(data[k]));
+                res = vals.length > 0 ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
+            }
 
-            if(exams.length > 0 || hasActivity) {
-                let subjectAvg = 0;
-                
-                if(exams.length > 0 && hasActivity) {
-                    // المعادلة المطلوبة: (معدل الفروض * 0.75) + (الأنشطة * 0.25)
-                    const examsAvg = exams.reduce((a, b) => a + b, 0) / exams.length;
-                    subjectAvg = (examsAvg * 0.75) + (parseFloat(activity) * 0.25);
-                } else if (exams.length > 0) {
-                    // إذا لم توجد أنشطة بعد، نحسب معدل الفروض فقط
-                    subjectAvg = exams.reduce((a, b) => a + b, 0) / exams.length;
-                } else {
-                    // إذا وجدت الأنشطة فقط
-                    subjectAvg = parseFloat(activity);
-                }
-
-                document.getElementById(`m-res-${i}`).innerText = subjectAvg.toFixed(2);
-                mTotal += subjectAvg; 
-                mCount++;
-            } else { 
-                document.getElementById(`m-res-${i}`).innerText = "---"; 
+            if(Object.values(data).some(v => v !== "")) {
+                document.getElementById(`m-res-${i}`).innerText = res.toFixed(2);
+                mTotal += res; mCount++;
+            } else {
+                document.getElementById(`m-res-${i}`).innerText = "---";
             }
         });
 
         const mFinal = mCount > 0 ? mTotal / mCount : 0;
-        const eVal = Object.values(db.e).filter(v => v !== "" && !isNaN(v));
-        const eFinal = eVal.length > 0 ? eVal.reduce((a,b) => parseFloat(a)+parseFloat(b), 0) / eVal.length : 0;
+        const eFinal = (Object.values(db.e).filter(v => v !== "").reduce((a,b) => a + parseFloat(b), 0) / subjects.length) || 0;
 
         document.getElementById('m-final').innerText = mFinal.toFixed(2);
         document.getElementById('e-final').innerText = eFinal.toFixed(2);
-        
-        // المعدل النهائي (بناءً على افتراض أن المراقبة والامتحان لهما نفس الوزن)
         document.getElementById('total-final').innerText = ((mFinal + eFinal) / 2).toFixed(2);
     }
 
@@ -303,7 +296,7 @@
     }
 
     function clearData(type) {
-        if(confirm("مسح جميع النقاط؟")) {
+        if(confirm("مسح جميع البيانات؟")) {
             if(type === 'monitoring') db.m = {}; else db.e = {};
             sync(); location.reload();
         }
