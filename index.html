@@ -2,306 +2,211 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة النقط </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>حاسبة النقط - الدورة الثانية</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0f111a;
-            --card-bg: rgba(26, 29, 46, 0.95);
-            --accent: #3d5afe;
-            --tarl-color: #00e676;
-            --text-main: #e0e0e0;
-            --border: rgba(255, 255, 255, 0.1);
+            --main-bg: #f8fafc;
+            --card-bg: #ffffff;
+            --primary: #4f46e5;
+            --accent: #10b981;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Tajawal', sans-serif; background: var(--main-bg); color: var(--text-dark); line-height: 1.6; }
 
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background: var(--bg-dark);
-            background-image: radial-gradient(circle at 50% 50%, #1a1d2e 0%, #0f111a 100%);
-            color: var(--text-main);
-            min-height: 100vh;
-            padding: 30px 15px;
+        /* الواجهة الأساسية */
+        #app-interface { padding-bottom: 110px; }
+
+        .top-bar {
+            background: white; padding: 15px; display: flex; flex-direction: column;
+            gap: 15px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
-        .container { max-width: 1300px; margin: 0 auto; }
+        .bar-header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
 
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 30px;
-            background: var(--card-bg);
-            border-radius: 20px;
-            border: 1px solid var(--border);
+        .section-selector { display: flex; background: #f1f5f9; padding: 4px; border-radius: 12px; width: 100%; }
+        .sec-btn {
+            flex: 1; padding: 10px; border: none; border-radius: 10px; cursor: pointer;
+            font-weight: 700; color: var(--text-light); background: transparent; transition: 0.3s;
+        }
+        .sec-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+
+        .content-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px; padding: 15px;
         }
 
-        .tabs-wrapper {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            justify-content: center;
+        /* بطاقة المادة */
+        .subject-card {
+            background: var(--card-bg); border-radius: 20px; padding: 18px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;
         }
 
-        .tab-btn {
-            background: #1a1d2e;
-            color: #888;
-            border: 1px solid var(--border);
-            padding: 12px 30px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 700;
-        }
+        .sub-header { display: flex; justify-content: space-between; margin-bottom: 15px; align-items: center; }
+        .sub-name { font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .sub-avg-label { color: var(--accent); font-weight: 900; font-size: 1.1rem; background: #ecfdf5; padding: 2px 10px; border-radius: 8px; }
 
-        .tab-btn.active {
-            background: var(--accent);
-            color: white;
-        }
-
-        .table-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 20px;
-            border: 1px solid var(--border);
-            overflow-x: auto;
-        }
-
-        table { width: 100%; border-collapse: separate; border-spacing: 0 5px; }
-
-        th { padding: 10px; color: #888; font-size: 0.85rem; text-align: center; }
-
-        td { padding: 8px; text-align: center; background: rgba(255,255,255,0.02); }
-
-        td:first-child {
-            text-align: right;
-            padding-right: 15px;
-            color: #fff;
-            font-weight: 700;
-            border-radius: 0 10px 10px 0;
-            min-width: 160px;
-        }
-
-        .tarl-input { border-color: var(--tarl-color) !important; color: var(--tarl-color) !important; }
-
+        .inputs-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .input-box { display: flex; flex-direction: column; gap: 4px; }
+        .input-box label { font-size: 0.7rem; color: var(--text-light); font-weight: 700; white-space: nowrap; }
+        
         input {
-            width: 55px;
-            background: rgba(0,0,0,0.4);
-            border: 1px solid var(--border);
-            padding: 8px;
-            border-radius: 6px;
-            color: #fff;
-            text-align: center;
-            font-weight: 700;
-            outline: none;
+            width: 100%; padding: 12px 5px; border: 1px solid #e2e8f0; border-radius: 10px;
+            text-align: center; font-weight: 700; font-size: 1rem; color: var(--text-dark);
+            background: #f8fafc; -webkit-appearance: none;
         }
+        input:focus { border-color: var(--primary); outline: none; background: #fff; ring: 2px solid var(--primary); }
 
-        input:focus { border-color: var(--accent); background: rgba(61, 90, 254, 0.1); }
-
-        .avg-display { font-weight: 900; color: var(--accent); }
-
-        .summary-bar {
-            margin-top: 30px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+        /* شريط النتائج السفلي */
+        .bottom-results {
+            position: fixed; bottom: 0; left: 0; right: 0; background: white;
+            padding: 12px 10px; border-top: 1px solid #e2e8f0; display: flex;
+            justify-content: space-between; align-items: center; z-index: 1000;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
         }
+        .res-item { text-align: center; flex: 1; }
+        .res-item span { display: block; font-size: 0.65rem; color: var(--text-light); font-weight: 700; }
+        .res-item b { font-size: 1.1rem; color: var(--primary); }
+        .res-item.total b { color: #ffffff; background: var(--primary); padding: 4px 12px; border-radius: 10px; font-size: 1.2rem; }
 
-        .stat-box {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            border: 1px solid var(--border);
-        }
+        .btn-reset { color: #ef4444; background: none; border: 1px solid #fee2e2; padding: 5px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; cursor: pointer; }
 
-        .stat-box p { font-size: 2rem; font-weight: 900; color: var(--accent); }
-
-        .reset-btn {
-            background: rgba(244, 67, 54, 0.1);
-            color: #f44336;
-            border: 1px solid rgba(244, 67, 54, 0.2);
-            padding: 5px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-
-        .tarl-notice {
-            margin-top: 15px;
-            color: var(--tarl-color);
-            font-weight: bold;
-            text-align: center;
-            font-size: 1.1rem;
+        @media (max-width: 400px) {
+            .inputs-group { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
-<body>
+<body onload="initApp()">
 
-<div class="container">
-    <div class="header">
-        <h1>حاسبة النقط  </h1>
-    </div>
-
-    <div class="tabs-wrapper">
-        <button class="tab-btn active" id="btn-m" onclick="switchSection('monitoring')">المراقبة المستمرة</button>
-        <button class="tab-btn" id="btn-e" onclick="switchSection('exam')">الامتحان</button>
-    </div>
-
-    <div id="monitoring-section">
-        <button class="reset-btn" onclick="clearData('monitoring')">مسح البيانات</button>
-        <div class="table-card">
-            <table>
-                <thead>
-                    <tr>
-                        <th>المادة</th>
-                        <th style="color:var(--tarl-color)">TARL (خاص)</th>
-                        <th>فرض 1</th>
-                        <th>فرض 2</th>
-                        <th>فرض 3</th>
-                        <th>فرض 4</th>
-                        <th>أنشطة</th>
-                        <th>المعدل</th>
-                    </tr>
-                </thead>
-                <tbody id="m-body"></tbody>
-            </table>
+    <div id="app-interface">
+        <div class="top-bar">
+            <div class="bar-header">
+                <h2 style="font-size: 1.2rem;">حاسبة الدورة الثانية</h2>
+                <button class="btn-reset" onclick="clearData()">مسح النقط</button>
+            </div>
+            <div class="section-selector">
+                <button class="sec-btn active" id="btn-m" onclick="switchSection('monitoring')">المراقبة المستمرة</button>
+                <button class="sec-btn" id="btn-e" onclick="switchSection('exam')">الامتحان الموحد</button>
+            </div>
         </div>
-        <p class="tarl-notice">لن تعتمد نقطة TARL الخاصة بالجتماعيات  في الحساب</p>
-    </div>
 
-    <div id="exam-section" style="display:none">
-        <button class="reset-btn" onclick="clearData('exam')">مسح البيانات</button>
-        <div class="table-card">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="text-align: right;">المادة</th>
-                        <th>نقطة الامتحان (من 20)</th>
-                    </tr>
-                </thead>
-                <tbody id="e-body"></tbody>
-            </table>
+        <div id="monitoring-area" class="content-grid"></div>
+        <div id="exam-area" class="content-grid" style="display:none"></div>
+
+        <div class="bottom-results">
+            <div class="res-item"><span>المراقبة</span><b id="res-m">0.00</b></div>
+            <div class="res-item"><span>الامتحان</span><b id="res-e">0.00</b></div>
+            <div class="res-item total"><span>المعدل العام</span><b id="res-total">0.00</b></div>
         </div>
     </div>
-
-    <div class="summary-bar">
-        <div class="stat-box"><h3>معدل المراقبة</h3><p id="m-final">0.00</p></div>
-        <div class="stat-box"><h3>معدل الامتحان</h3><p id="e-final">0.00</p></div>
-        <div class="stat-box" style="border-color: var(--accent)"><h3>المعدل النهائي</h3><p id="total-final">0.00</p></div>
-    </div>
-</div>
 
 <script>
     const subjects = [
-        "الاجتماعيات", "التربية الإسلامية", "التربية البدنية", 
-        "التكنولوجيا", "الرياضيات", "الفيزياء والكيمياء", 
-        "اللغة الإنجليزية", "اللغة العربية", "اللغة الفرنسية", 
-        "المعلوميات", "علوم الحياة والأرض"
+        { name: "العربية", icon: "📖", coef: 3 },
+        { name: "الرياضيات", icon: "📐", coef: 3 },
+        { name: "الفرنسية", icon: "🇫🇷", coef: 3 },
+        { name: "الاجتماعيات", icon: "🌍", coef: 1 },
+        { name: "الفيزياء", icon: "🧪", coef: 1 },
+        { name: "SVT", icon: "🌱", coef: 1 },
+        { name: "الإسلامية", icon: "🌙", coef: 1 },
+        { name: "الإنجليزية", icon: "🇬🇧", coef: 1 },
+        { name: "البدنية", icon: "🏃", coef: 1 },
+        { name: "التكنولوجيا", icon: "⚙️", coef: 1 },
+        { name: "المعلوميات", icon: "💻", coef: 1 }
     ];
 
-    // المواد التي تظهر فيها خانة TARL منفصلة
-    const tarlVisibleSubjects = ["اللغة العربية", "اللغة الفرنسية", "الرياضيات", "علوم الحياة والأرض"];
+    let db = { m: {}, e: {} };
 
-    let db = JSON.parse(localStorage.getItem('gradeDB')) || { m: {}, e: {} };
+    function initApp() {
+        const saved = localStorage.getItem('gradeDB_S2_Final');
+        db = saved ? JSON.parse(saved) : { m: {}, e: {} };
+        renderCards();
+    }
 
-    function init() {
-        const mBody = document.getElementById('m-body');
-        const eBody = document.getElementById('e-body');
+    function renderCards() {
+        const mArea = document.getElementById('monitoring-area');
+        const eArea = document.getElementById('exam-area');
+        mArea.innerHTML = ""; eArea.innerHTML = "";
 
         subjects.forEach((s, i) => {
-            let showTarlInput = tarlVisibleSubjects.includes(s);
-            
-            let mRow = `<tr><td>${s}</td>`;
-            
-            // خانة TARL (العمود 5)
-            mRow += `<td><input type="text" class="nav-input ${showTarlInput ? 'tarl-input' : ''}" 
-                        ${!showTarlInput ? 'disabled placeholder="-" style="opacity:0.3"' : ''} 
-                        data-row="${i}" data-col="5" value="${db.m[i]?.[5] || ''}" 
-                        oninput="validate(this); saveM(${i},5,this.value)"></td>`;
+            // بطاقة المراقبة
+            let mCard = document.createElement('div');
+            mCard.className = 'subject-card';
+            mCard.innerHTML = `
+                <div class="sub-header">
+                    <span class="sub-name">${s.icon} ${s.name}</span>
+                    <span class="sub-avg-label" id="avg-${i}">0.00</span>
+                </div>
+                <div class="inputs-group">
+                    <div class="input-box"><label>فرض 1</label><input type="number" inputmode="decimal" oninput="v(this); sM(${i},0,this.value)" value="${db.m[i]?.[0] || ''}"></div>
+                    <div class="input-box"><label>فرض 2</label><input type="number" inputmode="decimal" oninput="v(this); sM(${i},1,this.value)" value="${db.m[i]?.[1] || ''}"></div>
+                    <div class="input-box"><label>فرض 3</label><input type="number" inputmode="decimal" oninput="v(this); sM(${i},2,this.value)" value="${db.m[i]?.[2] || ''}"></div>
+                    <div class="input-box"><label>فرض 4</label><input type="number" inputmode="decimal" oninput="v(this); sM(${i},3,this.value)" value="${db.m[i]?.[3] || ''}"></div>
+                    <div class="input-box" style="grid-column: span 2"><label>الأنشطة</label><input type="number" inputmode="decimal" oninput="v(this); sM(${i},4,this.value)" value="${db.m[i]?.[4] || ''}"></div>
+                </div>`;
+            mArea.appendChild(mCard);
 
-            // الفروض والأنشطة (0-4)
-            for(let j=0; j<5; j++) {
-                mRow += `<td><input type="text" class="nav-input" data-row="${i}" data-col="${j}" 
-                          value="${db.m[i]?.[j] || ''}" oninput="validate(this); saveM(${i},${j},this.value)"></td>`;
-            }
-            
-            mRow += `<td id="m-res-${i}" class="avg-display">---</td></tr>`;
-            mBody.innerHTML += mRow;
-
-            eBody.innerHTML += `<tr><td style="text-align:right">${s}</td>
-                <td><input type="text" class="nav-input-e" data-row="${i}" data-col="0" 
-                value="${db.e[i] || ''}" oninput="validate(this); saveE(${i},this.value)"></td></tr>`;
+            // بطاقة الامتحان
+            let eCard = document.createElement('div');
+            eCard.className = 'subject-card';
+            eCard.innerHTML = `
+                <div class="sub-header"><span class="sub-name">${s.icon} ${s.name}</span></div>
+                <div class="input-box">
+                    <label>نقطة الامتحان الموحد</label>
+                    <input type="number" inputmode="decimal" oninput="v(this); sE(${i},this.value)" value="${db.e[i] || ''}">
+                </div>`;
+            eArea.appendChild(eCard);
         });
         calc();
     }
 
-    function validate(input) {
-        input.value = input.value.replace(/[^0-9.]/g, '');
-        if (parseFloat(input.value) > 20) input.value = "20";
+    function v(el) {
+        if (parseFloat(el.value) > 20) el.value = "20";
     }
 
-    function saveM(r, c, v) { if(!db.m[r]) db.m[r] = {}; db.m[r][c] = v; sync(); }
-    function saveE(r, v) { db.e[r] = v; sync(); }
-    function sync() { localStorage.setItem('gradeDB', JSON.stringify(db)); calc(); }
+    function sM(r, c, val) { if(!db.m[r]) db.m[r] = {}; db.m[r][c] = val; sync(); }
+    function sE(r, val) { db.e[r] = val; sync(); }
+    function sync() { localStorage.setItem('gradeDB_S2_Final', JSON.stringify(db)); calc(); }
 
     function calc() {
-        let mTotal = 0, mCount = 0;
-
+        let mTotal = 0, eTotal = 0, totalCoef = 0;
         subjects.forEach((s, i) => {
-            const data = db.m[i] || {};
-            let res = 0;
+            const d = db.m[i] || {};
+            let vals = [0,1,2,3,4].filter(k => d[k] && d[k]!=="").map(k => parseFloat(d[k]));
+            let subAvg = vals.length > 0 ? (vals.reduce((a,b)=>a+b,0)/vals.length) : 0;
             
-            if (tarlVisibleSubjects.includes(s)) {
-                // المعادلة للمواد الأساسية: TARL*0.2 + F1*0.3 + F2*0.3 + Act*0.2
-                const tarl = parseFloat(data[5]) || 0;
-                const f1 = parseFloat(data[0]) || 0;
-                const f2 = parseFloat(data[1]) || 0;
-                const act = parseFloat(data[4]) || 0;
-                res = (tarl * 0.2) + (f1 * 0.3) + (f2 * 0.3) + (act * 0.2);
-            } 
-            else if (s === "الفيزياء والكيمياء") {
-                // الفيزياء: 5 خانات (F1, F2, F3/TARL, F4, Act) كل واحدة ضرب 0.2
-                let sum = 0;
-                for(let j=0; j<5; j++) sum += (parseFloat(data[j]) || 0);
-                res = sum * 0.2;
-            }
-            else {
-                // النظام العادي لباقي المواد (بما فيها الاجتماعيات)
-                let vals = [0,1,2,3,4].filter(k => data[k] !== "" && data[k] !== undefined).map(k => parseFloat(data[k]));
-                res = vals.length > 0 ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
-            }
-
-            if(Object.values(data).some(v => v !== "")) {
-                document.getElementById(`m-res-${i}`).innerText = res.toFixed(2);
-                mTotal += res; mCount++;
-            } else {
-                document.getElementById(`m-res-${i}`).innerText = "---";
-            }
+            document.getElementById(`avg-${i}`).innerText = subAvg.toFixed(2);
+            mTotal += (subAvg * s.coef);
+            eTotal += ((parseFloat(db.e[i]) || 0) * s.coef);
+            totalCoef += s.coef;
         });
 
-        const mFinal = mCount > 0 ? mTotal / mCount : 0;
-        const eFinal = (Object.values(db.e).filter(v => v !== "").reduce((a,b) => a + parseFloat(b), 0) / subjects.length) || 0;
-
-        document.getElementById('m-final').innerText = mFinal.toFixed(2);
-        document.getElementById('e-final').innerText = eFinal.toFixed(2);
-        document.getElementById('total-final').innerText = ((mFinal + eFinal) / 2).toFixed(2);
+        const finalM = mTotal / totalCoef;
+        const finalE = eTotal / totalCoef;
+        document.getElementById('res-m').innerText = finalM.toFixed(2);
+        document.getElementById('res-e').innerText = finalE.toFixed(2);
+        document.getElementById('res-total').innerText = ((finalM + finalE) / 2).toFixed(2);
     }
 
     function switchSection(sec) {
-        document.getElementById('monitoring-section').style.display = sec === 'monitoring' ? 'block' : 'none';
-        document.getElementById('exam-section').style.display = sec === 'exam' ? 'block' : 'none';
+        document.getElementById('monitoring-area').style.display = sec === 'monitoring' ? 'grid' : 'none';
+        document.getElementById('exam-area').style.display = sec === 'exam' ? 'grid' : 'none';
         document.getElementById('btn-m').classList.toggle('active', sec === 'monitoring');
         document.getElementById('btn-e').classList.toggle('active', sec === 'exam');
+        window.scrollTo(0,0);
     }
 
-    function clearData(type) {
-        if(confirm("مسح جميع البيانات؟")) {
-            if(type === 'monitoring') db.m = {}; else db.e = {};
-            sync(); location.reload();
+    function clearData() {
+        if(confirm("هل أنت متأكد من مسح جميع النقط؟")) {
+            db = { m: {}, e: {} };
+            sync();
+            renderCards();
         }
     }
-    init();
 </script>
 </body>
 </html>
